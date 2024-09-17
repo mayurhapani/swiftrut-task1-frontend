@@ -11,5 +11,6 @@ VITE_BASE_URL=http://localhost:8001
 
 live url = https://swiftrut-task1-frontend.vercel.app/
 
+admin can see all the posts of the other users also
 admin email = mayur@gmail.com
 password = Mayur@123
