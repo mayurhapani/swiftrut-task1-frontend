@@ -8,3 +8,8 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 VITE_BASE_URL=http://localhost:8001
+
+live url = https://swiftrut-task1-frontend.vercel.app/
+
+admin email = mayur@gmail.com
+password = Mayur@123

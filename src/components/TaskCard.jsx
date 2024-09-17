@@ -81,7 +81,7 @@ export default function TaskCard({ task, user }) {
               </h3>
               <div className={`items-center ${user.role == "user" ? "hidden" : "flex"}`}>
                 <p>
-                  By : <span>@{user.name}</span>
+                  By : <span>@{task.createdBy.name}</span>
                 </p>
               </div>
             </div>
