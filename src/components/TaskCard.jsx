@@ -25,7 +25,7 @@ export default function TaskCard({ task, user }) {
           },
         }
       );
-      console.log("complete task", response);
+      // console.log("complete task", response);
 
       toast.success(response.data.message);
       setIsRefresh(!isRefresh);
@@ -81,14 +81,19 @@ export default function TaskCard({ task, user }) {
               </h3>
               <div className={`items-center ${user.role == "user" ? "hidden" : "flex"}`}>
                 <p>
-                  By : <span>@{task.createdBy.name}</span>
+                  By : <span>@{task?.createdBy?.name}</span>
                 </p>
               </div>
             </div>
-            <div className="flex mb-4 items-center">
+            <div className="flex mb-4 items-center justify-between">
               <p className={`text-md ${task.isCompleted ? "line-through text-gray-400" : ""}`}>
                 {task.description}
               </p>
+              <div className={`items-center ${user.role == "user" ? "hidden" : "flex"}`}>
+                <p>
+                  for : <span>@{task?.assignTo?.name}</span>
+                </p>
+              </div>
             </div>
             <div className="flex justify-between items-center">
               <div className="flex justify-center items-center">

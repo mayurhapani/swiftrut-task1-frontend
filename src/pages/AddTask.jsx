@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -7,6 +7,9 @@ export default function AddTask() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("medium");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -23,6 +26,7 @@ export default function AddTask() {
           title,
           description,
           category,
+          assignTo: selectedUserId,
         },
         {
           withCredentials: true,
@@ -43,6 +47,61 @@ export default function AddTask() {
       navigate("/addTask");
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(`${BASE_URL}/users/getUser`, {
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        setUser(response.data.data);
+        setSelectedUserId(response.data.data._id);
+      } catch (error) {
+        if (error.response) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.message);
+        }
+      }
+    };
+
+    const selectUser = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/users/getAllUsers`, {
+          withCredentials: true,
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        // console.log(response);
+
+        setUsers(response.data.data);
+      } catch (error) {
+        if (error.response) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.message);
+        }
+      }
+    };
+
+    fetchUser();
+    selectUser();
+  }, [BASE_URL, navigate]);
 
   return (
     <div className=" bg-[url(./assets/images/main_bg.jfif)] bg-no-repeat bg-cover h-screen">
@@ -83,6 +142,25 @@ export default function AddTask() {
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
               </select>
+
+              {user.role === "admin" && (
+                <select
+                  className="mb-3 p-2 rounded-sm"
+                  value={selectedUserId}
+                  onChange={(e) => {
+                    setSelectedUserId(e.target.value);
+                  }}
+                >
+                  <option value="" disabled>
+                    Select User
+                  </option>
+                  {users?.map((user) => (
+                    <option key={user._id} value={user._id}>
+                      {user.name}
+                    </option>
+                  ))}
+                </select>
+              )}
 
               <button className=" bg-blue-500 text-white rounded-md py-1 my-4" type="submit">
                 Add Task
